@@ -28,6 +28,7 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
     public int keypressed = -1;
     public TileManager tileManager;
     public boolean buttonPressed = false;
+    public String button = "none";
 
     public Paint textpaint = new Paint();
     public Helpers helpers;
@@ -57,7 +58,7 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
     }
 
     public void update() {
-        gameClient.sendData(String.valueOf(player.posX).getBytes());
+        gameClient.sendData(button.getBytes());
 
         switch (keypressed) {
             case 0:

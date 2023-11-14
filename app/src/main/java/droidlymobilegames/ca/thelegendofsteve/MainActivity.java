@@ -60,28 +60,34 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("FUCK YOU " + press);
         switch (press){
             case 21:
-                game.player.entityLeft = true;
+                /*game.player.entityLeft = true;
                 game.player.entityRight =false;
                 game.player.entityUp =false;
-                game.player.entityDown =false;game.buttonPressed = true;
+                game.player.entityDown =false;*/
+                game.button = "left";
+                game.buttonPressed = true;
                 break;
             case 22:
-                game.player.entityRight = true;
+                /*game.player.entityRight = true;
                 game.player.entityLeft =false;
                 game.player.entityUp =false;
-                game.player.entityDown =false;game.buttonPressed = true;
+                game.player.entityDown =false;*/
+                game.button = "right";
+                game.buttonPressed = true;
                 break;
             case 19:
                 game.player.entityRight = false;
                 game.player.entityLeft =false;
                 game.player.entityUp =true;
-                game.player.entityDown =false;game.buttonPressed = true;
+                game.player.entityDown =false;
+                game.buttonPressed = true;
                 break;
             case 20:
                 game.player.entityRight = false;
                 game.player.entityLeft =false;
                 game.player.entityUp =false;
-                game.player.entityDown =true;game.buttonPressed = true;
+                game.player.entityDown =true;
+                game.buttonPressed = true;
                 break;
 
             case 23:
@@ -90,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                  game.player.entityLeft =false;
                  game.player.entityUp =false;
                  game.buttonPressed = false;
+                game.button = "none";
                 break;
 
         }

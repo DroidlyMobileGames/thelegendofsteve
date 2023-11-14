@@ -36,11 +36,21 @@ public class GameClient extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //sendData("cheesedoodle".getBytes());
+
+            try {
+                //Idea send data to server telling it that I'm moving left/right/up/down server
+                // responds back to player to move in direction which is handled locally
+                game.player.entityDirection = new String(data).trim();
+                //Now we need to figure out how to send data array that tells other players
+                //what animation the player is currently at plus other data like x y valuesin the world
+            }catch (Exception e){
+
+            }
         }
     }
 
     public void sendData(byte[] data) {
+
         DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 1313);
         try {
             socket.send(packet);
@@ -48,5 +58,8 @@ public class GameClient extends Thread {
             e.printStackTrace();
         }
 
+    }
+    public byte[] getData() {
+        return (String.valueOf(game.player.posX)).getBytes();
     }
 }
