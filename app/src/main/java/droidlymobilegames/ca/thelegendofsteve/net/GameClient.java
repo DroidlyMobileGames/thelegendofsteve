@@ -14,6 +14,7 @@ public class GameClient extends Thread {
     private InetAddress ipAddress;
     private DatagramSocket socket;
     private GameviewActivity game;
+    public String stringData;
 
     public GameClient(GameviewActivity game, String ipAddress) {
         this.game = game;
@@ -36,33 +37,36 @@ public class GameClient extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            try {
-                //Idea send data to server telling it that I'm moving left/right/up/down server
-                // responds back to player to move in direction which is handled locally
-                game.player.entityDirection = new String(data).trim();
-                //Now we need to figure out how to send data array that tells other players
-                //what animation the player is currently at plus other data like x y valuesin the world
-                //Direction is handled based on the button the user presses sent to the database
-                //then sent back to the game so data is consistant.  This is only the case if playing
-                //online mode.
-            }catch (Exception e){
-
-            }
+            stringData = new String(packet.getData(), 0, packet.getLength());
+            this.parsePacket(stringData, packet.getAddress(), packet.getPort());
         }
     }
 
-    public void sendData(byte[] data) {
+    private void parsePacket(String data, InetAddress address, int port) {
+        String[] dataArray = data.split(",");
+        switch (dataArray[0]) {
+            default:
+            case "-1":
+                break;
+            case "01"://LOGIN
+                break;
+            case "02"://LOGOUT
+                break;
+            case "03"://MOVING
+                game.movePlayer(dataArray[1],dataArray[2],dataArray[3]);
+                break;
+        }
+    }
 
-        DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 1313);
+
+
+    public void sendData(String databytes) {
+        DatagramPacket packet = new DatagramPacket(databytes.getBytes(), databytes.length(),
+                ipAddress, 1313);
         try {
             socket.send(packet);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-    public byte[] getData() {
-        return (String.valueOf(game.player.posX)).getBytes();
     }
 }

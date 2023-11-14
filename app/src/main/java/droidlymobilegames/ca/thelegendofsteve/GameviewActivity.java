@@ -10,6 +10,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
+
+import droidlymobilegames.ca.thelegendofsteve.Entities.EntityInfo;
+import droidlymobilegames.ca.thelegendofsteve.Entities.MultiPlayer;
 import droidlymobilegames.ca.thelegendofsteve.Entities.Player;
 import droidlymobilegames.ca.thelegendofsteve.Tools.Helpers;
 import droidlymobilegames.ca.thelegendofsteve.World.TileManager;
@@ -29,9 +32,11 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
     public TileManager tileManager;
     public boolean buttonPressed = false;
     public String button = "none";
+    public int moveDirectionID = 1;
 
     public Paint textpaint = new Paint();
     public Helpers helpers;
+    public MultiPlayer multiPlayer;
 
 
     public GameviewActivity(Context context) {
@@ -55,46 +60,24 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
         textpaint.setColor(Color.BLUE);
         gameClient = new GameClient(this,"192.168.3.125");
         gameClient.start();
+        multiPlayer = new MultiPlayer(this);
     }
-
+    public void movePlayer(String posX, String posY, String direction) {
+        multiPlayer.posX = Integer.parseInt(posX) + 160;
+        multiPlayer.posY = Integer.parseInt(posY) + 160;
+        multiPlayer.checkDirection(Integer.parseInt(direction.trim()));
+    }
     public void update() {
-        gameClient.sendData(button.getBytes());
-
-        switch (keypressed) {
-            case 0:
-                player.entityUp = true;
-                player.entityRight = false;
-                player.entityLeft = false;
-                player.entityDown = false;
-                break;
-            case 3:
-                player.entityDown = true;
-                player.entityRight = false;
-                player.entityLeft = false;
-                player.entityUp = false;
-                break;
-            case 1:
-                player.entityLeft = true;
-                player.entityRight = false;
-                player.entityDown = false;
-                player.entityUp = false;
-                break;
-            case 2:
-                player.entityRight = true;
-                player.entityDown = false;
-                player.entityLeft = false;
-                player.entityUp = false;
-                break;
-
-        }
         player.update();
-        //gameClient.sendData("HELLO WORLD".getBytes(StandardCharsets.UTF_8));
+        multiPlayer.update();
     }
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
         tileManager.drawTiles(canvas);
+
         player.draw(canvas);
+        multiPlayer.draw(canvas);
         canvas.drawText(String.valueOf(keypressed), 100, 100, textpaint);
     }
 

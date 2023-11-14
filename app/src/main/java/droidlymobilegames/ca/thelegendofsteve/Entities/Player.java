@@ -18,23 +18,29 @@ public class Player extends EntityInfo{
         walkSpeed = 10;
     }
     public void update(){
-        updatePlayerDirection();
+        //updatePlayerDirection();
         checkPlayerAction();
         updateEntityAnimations();
+        checkDpadJoystickHandleMovement();
+    }
+    public void updatePlayerOnlineStatus(){
+        if (game.gameClient != null) {
+            game.gameClient.sendData("03" + "," + posX + "," + posY + "," + game.moveDirectionID);
+        }
     }
     public void updatePlayerDirection(){
-        if (game.button.equals("right")){
-            entityDirection = "right";
-            entityDefaultDirection = "right";
-        }else if (game.button.equals("left")){
+        if (entityLeft){
             entityDirection = "left";
             entityDefaultDirection = "left";
-        }else if (game.button.equals("down")){
-            entityDirection = "down";
-            entityDefaultDirection = "down";
-        }else if (game.button.equals("up")){
+        }else if (entityRight){
+            entityDirection = "right";
+            entityDefaultDirection = "right";
+        }else if (entityUp){
             entityDirection = "up";
             entityDefaultDirection = "up";
+        }else if (entityDown){
+            entityDirection = "down";
+            entityDefaultDirection = "down";
         }else if (!game.buttonPressed){
             entityDirection = "none";
             animNum = 1;
@@ -42,8 +48,9 @@ public class Player extends EntityInfo{
         }
     }
     public void updateEntityAnimations() {
-        if (game.buttonPressed == false){
-            entityDirection = "buttonreleased";
+        updatePlayerOnlineStatus();
+        if (game.moveDirectionID == 1){
+            entityDirection = "none";
         }
         if (game.buttonPressed) {
             animCount++;
@@ -73,6 +80,7 @@ public class Player extends EntityInfo{
                 }
             }
         }
+
         if (entityDirection.equals("down")) {
             if (animNum == 1 || animNum == 3) {
                 defaultImg = sprites[0];
@@ -118,7 +126,7 @@ public class Player extends EntityInfo{
             }
         }
 
-        if (entityDirection.equals("buttonreleased")) {
+        if (entityDirection.equals("none")) {
             if (entityDefaultDirection.equals("up")) {
                 defaultImg = sprites[9];
             }
@@ -150,30 +158,6 @@ public class Player extends EntityInfo{
         }
     }
 
-    public void handleABXY(int previousButton) {
-        System.out.println("GET BUTTON " + previousButton);
-        switch (previousButton){
-            case 96://A
-                handleAbutton();
-                checkDpadHandleMovement();
-                break;
-            case 97://B
-                handleBbutton();
-                checkDpadHandleMovement();
-                break;
-            case 99://X
-                handleXbutton();
-                checkDpadHandleMovement();
-                break;
-            case 100://Y
-                handleYbutton();
-                checkDpadHandleMovement();
-                break;
-            case -1://BUTTON RELEASED
-                break;
-
-        }
-    }
 
     private void handleYbutton() {
 
@@ -191,21 +175,35 @@ public class Player extends EntityInfo{
 
     }
 
-    private void checkDpadHandleMovement() {
-        if (entityRight){
-            entityDirection = "right";
-            //KEEP GOING RIGHT
-        }
-        if (entityLeft){
+    private void checkDpadJoystickHandleMovement() {
+
+        if (game.moveDirectionID == 2){
             entityDirection = "left";
+            entityDefaultDirection = "left";
+            game.buttonPressed = true;
             //KEEP GOING RIGHT
         }
-        if (entityUp){
+        if (game.moveDirectionID == 3) {
+            entityDirection = "right";
+            entityDefaultDirection = "right";
+            game.buttonPressed = true;
+            //KEEP GOING RIGHT
+        }
+        if (game.moveDirectionID == 4){
             entityDirection = "up";
+            entityDefaultDirection = "up";
+            game.buttonPressed = true;
             //KEEP GOING RIGHT
         }
-        if (entityDown){
+        if (game.moveDirectionID == 5){
             entityDirection = "down";
+            entityDefaultDirection = "down";
+            game.buttonPressed = true;
+            //KEEP GOING RIGHT
+        }
+        if (game.moveDirectionID == 1){
+            entityDirection = "none";
+            game.buttonPressed = false;
             //KEEP GOING RIGHT
         }
     }

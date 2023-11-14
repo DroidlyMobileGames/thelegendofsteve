@@ -57,52 +57,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkButtonPressed(int press) {
-        System.out.println("FUCK YOU " + press);
+        game.keypressed = press;
         switch (press){
             case 21:
-                /*game.player.entityLeft = true;
-                game.player.entityRight =false;
-                game.player.entityUp =false;
-                game.player.entityDown =false;*/
-                game.button = "left";
+                game.moveDirectionID = 2;
                 game.buttonPressed = true;
                 break;
             case 22:
-                /*game.player.entityRight = true;
-                game.player.entityLeft =false;
-                game.player.entityUp =false;
-                game.player.entityDown =false;*/
-                game.button = "right";
+                game.moveDirectionID = 3;
                 game.buttonPressed = true;
                 break;
             case 19:
-                /*game.player.entityRight = false;
-                game.player.entityLeft =false;
-                game.player.entityUp =true;
-                game.player.entityDown =false;*/
-                game.button = "up";
+                game.moveDirectionID = 4;
                 game.buttonPressed = true;
                 break;
             case 20:
-                /*game.player.entityRight = false;
-                game.player.entityLeft =false;
-                game.player.entityUp =false;
-                game.player.entityDown =true;*/
-                game.button = "down";
+                game.moveDirectionID = 5;
                 game.buttonPressed = true;
                 break;
 
             case 23:
-                 game.player.entityRight =false;
-                 game.player.entityDown =false;
-                 game.player.entityLeft =false;
-                 game.player.entityUp =false;
                  game.buttonPressed = false;
-                game.button = "none";
+                 game.moveDirectionID = 1;
                 break;
 
         }
     }
+
     @Override
     public boolean onGenericMotionEvent(MotionEvent motionEvent) {
         boolean handled = true;
@@ -133,13 +114,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {  //BUTTON PRESSED
+            if (event.getAction() == KeyEvent.ACTION_DOWN) { //BUTTON PRESSED
                 if (previousButton != event.getKeyCode() &&
                         !mJoystickListener.onButton(event.getKeyCode(), true)) {
                     return false;
                 } else {
                     previousButton = event.getKeyCode();
-                    game.player.handleABXY(previousButton);
                     return true;
                 }
 
@@ -148,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 } else {
                     previousButton = -1;
-                    game.player.handleABXY(previousButton);
                     return true;
                 }
             }
@@ -212,23 +191,24 @@ public class MainActivity extends AppCompatActivity {
             //This is where we can do what we want with our efficient , accurate joystick data :)
             mJoystickListener.onJoystick(previousJoystick); //here, we pass our data to our listening fragments
         }
+
         if (newJoystickValues[1] == 1){
-            game.player.entityDown = true;game.buttonPressed = true;
+            game.moveDirectionID = 5;
+            game.buttonPressed = true;
         }else
         if (newJoystickValues[1] == -1){
-            game.player.entityUp = true;game.buttonPressed = true;
+            game.moveDirectionID = 4;
+            game.buttonPressed = true;
         }else
         if (newJoystickValues[0] == -1){
-            game.player.entityLeft = true;game.buttonPressed = true;
+            game.moveDirectionID = 2;
+            game.buttonPressed = true;
         }else
         if (newJoystickValues[0] == 1) {
-            game.player.entityRight = true;
+            game.moveDirectionID = 3;
             game.buttonPressed = true;
         }else {
-            game.player.entityUp = false;
-            game.player.entityDown = false;
-            game.player.entityLeft = false;
-            game.player.entityRight = false;
+            game.moveDirectionID = 1;
             game.buttonPressed = false;
         }
     }
