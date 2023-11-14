@@ -13,11 +13,15 @@ import androidx.annotation.NonNull;
 import droidlymobilegames.ca.thelegendofsteve.Entities.Player;
 import droidlymobilegames.ca.thelegendofsteve.Tools.Helpers;
 import droidlymobilegames.ca.thelegendofsteve.World.TileManager;
+import droidlymobilegames.ca.thelegendofsteve.net.GameClient;
+import droidlymobilegames.ca.thelegendofsteve.net.GameServer;
 
 public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callback {
 
     SurfaceHolder surfaceHolder;
     public GameLoop gameLoop;
+    public GameClient gameClient;
+    public GameServer gameServer;
     public Player player;
     public int worldXSize, worldYSize;
     public int tileSize, cameraWidth, cameraHeight = 0;
@@ -48,9 +52,13 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
 
         textpaint.setTextSize(50);
         textpaint.setColor(Color.BLUE);
+        gameClient = new GameClient(this,"192.168.3.125");
+        gameClient.start();
     }
 
     public void update() {
+        gameClient.sendData(String.valueOf(player.posX).getBytes());
+
         switch (keypressed) {
             case 0:
                 player.entityUp = true;
