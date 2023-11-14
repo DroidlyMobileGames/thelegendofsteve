@@ -23,16 +23,16 @@ public class Player extends EntityInfo{
         updateEntityAnimations();
     }
     public void updatePlayerDirection(){
-        if (entityRight){
+        if (game.button.equals("right")){
             entityDirection = "right";
             entityDefaultDirection = "right";
-        }else if (entityLeft){
+        }else if (game.button.equals("left")){
             entityDirection = "left";
             entityDefaultDirection = "left";
-        }else if (entityDown){
+        }else if (game.button.equals("down")){
             entityDirection = "down";
             entityDefaultDirection = "down";
-        }else if (entityUp){
+        }else if (game.button.equals("up")){
             entityDirection = "up";
             entityDefaultDirection = "up";
         }else if (!game.buttonPressed){

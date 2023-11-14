@@ -43,6 +43,9 @@ public class GameClient extends Thread {
                 game.player.entityDirection = new String(data).trim();
                 //Now we need to figure out how to send data array that tells other players
                 //what animation the player is currently at plus other data like x y valuesin the world
+                //Direction is handled based on the button the user presses sent to the database
+                //then sent back to the game so data is consistant.  This is only the case if playing
+                //online mode.
             }catch (Exception e){
 
             }

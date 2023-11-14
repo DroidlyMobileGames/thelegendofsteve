@@ -76,17 +76,19 @@ public class MainActivity extends AppCompatActivity {
                 game.buttonPressed = true;
                 break;
             case 19:
-                game.player.entityRight = false;
+                /*game.player.entityRight = false;
                 game.player.entityLeft =false;
                 game.player.entityUp =true;
-                game.player.entityDown =false;
+                game.player.entityDown =false;*/
+                game.button = "up";
                 game.buttonPressed = true;
                 break;
             case 20:
-                game.player.entityRight = false;
+                /*game.player.entityRight = false;
                 game.player.entityLeft =false;
                 game.player.entityUp =false;
-                game.player.entityDown =true;
+                game.player.entityDown =true;*/
+                game.button = "down";
                 game.buttonPressed = true;
                 break;
 
