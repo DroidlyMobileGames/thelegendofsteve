@@ -11,6 +11,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+
 import droidlymobilegames.ca.thelegendofsteve.Entities.EntityInfo;
 import droidlymobilegames.ca.thelegendofsteve.Entities.MultiPlayer;
 import droidlymobilegames.ca.thelegendofsteve.Entities.Player;
@@ -36,7 +39,8 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
 
     public Paint textpaint = new Paint();
     public Helpers helpers;
-    public MultiPlayer multiPlayer;
+    public MultiPlayer[] multiPlayer;
+    public ArrayList<MultiPlayer> multiPlayers = new ArrayList<>();
 
 
     public GameviewActivity(Context context) {
@@ -60,24 +64,57 @@ public class GameviewActivity extends SurfaceView implements SurfaceHolder.Callb
         textpaint.setColor(Color.BLUE);
         gameClient = new GameClient(this,"192.168.3.125");
         gameClient.start();
-        multiPlayer = new MultiPlayer(this);
+
+        multiPlayer = new MultiPlayer[5];
     }
-    public void movePlayer(String posX, String posY, String direction) {
-        multiPlayer.posX = Integer.parseInt(posX) + 160;
-        multiPlayer.posY = Integer.parseInt(posY) + 160;
-        multiPlayer.checkDirection(Integer.parseInt(direction.trim()));
+    public void movePlayer(String posX, String posY, String direction, String username) {
+        for (int i = 0; i < multiPlayer.length; i++) {
+            if (multiPlayer[i] != null) {
+                /*int index = multiPlayer[i].username.indexOf(multiPlayer[i].port);*/
+                multiPlayer[i].posX = Integer.parseInt(posX);
+                multiPlayer[i].posY = Integer.parseInt(posY);
+                multiPlayer[i].checkDirection(Integer.parseInt(direction.trim()));
+            }
+        }
+
+    }
+
+    public void addPlayer(String posX, String posY, String direction, String username, InetAddress address, int port){
+        for (int i = 0; i < multiPlayer.length; i++){
+
+            if (multiPlayer[i] == null){
+                multiPlayer[i] = new MultiPlayer(this);
+                multiPlayer[i].posX = Integer.parseInt(posX);
+                multiPlayer[i].posY = Integer.parseInt(posY);
+                multiPlayer[i].entityDirection = direction;
+                multiPlayer[i].username = username;
+                multiPlayer[i].ipAddress = address;
+                multiPlayer[i].port = port;
+            }
+            break;
+        }
     }
     public void update() {
+
         player.update();
-        multiPlayer.update();
+
+        for (int mp = 0; mp < multiPlayer.length; mp++){
+            if (multiPlayer[mp] != null) {
+                multiPlayer[mp].update();
+            }
+        }
     }
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
         tileManager.drawTiles(canvas);
+        for (int mp = 0; mp < multiPlayer.length; mp++){
+            if (multiPlayer[mp] != null) {
+                multiPlayer[mp].draw(canvas);
+            }
+        }
+        //player.draw(canvas);
 
-        player.draw(canvas);
-        multiPlayer.draw(canvas);
         canvas.drawText(String.valueOf(keypressed), 100, 100, textpaint);
     }
 

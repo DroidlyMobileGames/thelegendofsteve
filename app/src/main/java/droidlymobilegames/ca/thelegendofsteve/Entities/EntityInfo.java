@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
+import java.net.InetAddress;
+
 import droidlymobilegames.ca.thelegendofsteve.GameviewActivity;
 import droidlymobilegames.ca.thelegendofsteve.R;
 
@@ -20,11 +22,17 @@ public class EntityInfo {
 
     public String entityDirection = "none";
     public String entityDefaultDirection = "down";
+    public String username = "bob";
 
     public boolean entityRight,entityLeft,entityUp,entityDown = false;
 
     public Bitmap defaultImg = null;
     public Bitmap[] sprites = new Bitmap[100];
+
+    //Networking
+    public InetAddress ipAddress;
+    public int port;
+    public boolean loggedin = false;
 
     public void draw(Canvas canvas){
         if (defaultImg != null) {

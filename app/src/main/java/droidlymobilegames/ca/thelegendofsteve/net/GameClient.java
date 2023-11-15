@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import droidlymobilegames.ca.thelegendofsteve.GameviewActivity;
 
@@ -15,6 +16,7 @@ public class GameClient extends Thread {
     private DatagramSocket socket;
     private GameviewActivity game;
     public String stringData;
+    public ArrayList<String> usernameList = new ArrayList<>();
 
     public GameClient(GameviewActivity game, String ipAddress) {
         this.game = game;
@@ -49,11 +51,12 @@ public class GameClient extends Thread {
             case "-1":
                 break;
             case "01"://LOGIN
+                game.addPlayer(dataArray[1],dataArray[2],dataArray[3],dataArray[4],address,port);
                 break;
             case "02"://LOGOUT
                 break;
             case "03"://MOVING
-                game.movePlayer(dataArray[1],dataArray[2],dataArray[3]);
+                game.movePlayer(dataArray[1],dataArray[2],dataArray[3],dataArray[4]);
                 break;
         }
     }
